@@ -1,0 +1,68 @@
+/*
+ * style.css
+ * Copyright (C) 2016 jbec
+ *
+ * Distributed under terms of the MIT license.
+ */
+
+body {
+    padding:20px;
+}
+
+input[type='file'] {
+  color: transparent;
+  width:0px !important;
+  visibility:hidden;
+  display:none !important;
+}
+
+.navbar{
+    margin-bottom:20px;
+}
+
+.no-border-right{
+    border-right:none;
+}
+
+.form-control.form-control-primary{
+    border-color:#0275d8;
+}
+
+.card img {
+    max-width:100%;
+    min-width:100%;
+}
+
+.carousel-control.left, .carousel-control.right {
+    background-image: none
+}
+
+.carousel img {
+    border-radius: 25px;
+}
+
+
+.navbar-brand {
+    float: none;
+}
+.navbar-nav .nav-item {
+    float: none;
+}
+.navbar-divider,
+.navbar-nav .nav-item+.nav-item,
+.navbar-nav .nav-link + .nav-link {
+    margin-left: 0;
+}
+@media (min-width: 34em) {
+    .navbar-brand {
+        float: left;
+    }
+    .navbar-nav .nav-item {
+        float: left;
+    }
+    .navbar-divider,
+    .navbar-nav .nav-item + .nav-item,
+    .navbar-nav .nav-link + .nav-link {
+        margin-left: 1rem;
+    }
+}
