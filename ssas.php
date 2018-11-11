@@ -112,15 +112,26 @@ class Ssas {
     function createUser($username, $password){
     try {
       if($username == "") return "username can't be empty";
-      if($password == "") return "password can't be empty";
+      if($password == "" ) return "password can't be empty";
       if (!(self::verifyInput($username) && self::verifyInput($password))) {
         // Bad user input, like illegal character/byte
         return "bad character";
       }
+      $uppercase = preg_match('@[A-Z]@', $password);
+      $lowercase = preg_match('@[a-z]@', $password);
+      $number    = preg_match('@[0-9]@', $password);
+
+      if(!$uppercase || !$lowercase || !$number || strlen($password) < 8) {
+        return "Bad password.Password must contain 8 characters and at least one number and capital letters.";
+      }
+
+      if($password == "") return "password can't be empty";
+
+      $hash = password_hash($password, PASSWORD_DEFAULT);
       //Inserts username and password into the database
       $query = "INSERT INTO user(username,password) VALUES (:username, :password);";
       $stmt = self::$a->prepare($query);
-      $stmt->execute(array(':username' => $username, ':password' => $password));
+      $stmt->execute(array(':username' => $username, ':password' => $hash));
 
       //If no exception has been thrown
       return true;
@@ -139,6 +150,8 @@ class Ssas {
     $stmt->execute(array(':username' => $username));
     $result = $stmt->fetchAll();
 
+    sleep(1);
+
 		if (sizeof($result) > 0 ) {
 			$row = $result[0];
 			$uid = $row['id'];
@@ -147,7 +160,7 @@ class Ssas {
       return "username and password does not match";
     }
     // If the real password matches the one given, then the login succeeds.
-      if(isset($password_real) && ($password === $password_real)){
+    if (password_verify($password, $password_real)) {
             //Generates random tokenid
             //TODO Maybe store some of this server side... (Stateful or stateless?)
             $tokenId = base64_encode(mcrypt_create_iv(32,MCRYPT_DEV_URANDOM));
