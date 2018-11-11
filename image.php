@@ -9,7 +9,7 @@ if(!isset($image)){
     echo "redirect!";
     exit();
 }
-if(isset($_POST['comment'])){ $comment_result = $ssas -> comment($image -> getId(), $_POST['comment']); }
+if(isset($_POST['comment'])){ $comment_result = $ssas -> comment($image -> getId(), htmlspecialchars($_POST['comment'])); }
 if(isset($_POST['remove_share'])){ $share_result = $ssas -> removeShare($image -> getId(), $_POST['remove_share']); }
 
 
@@ -126,3 +126,4 @@ if(isset($_POST['remove_share'])){ $share_result = $ssas -> removeShare($image -
 </div>
 
 <?php include 'footer.php'; ?>
+
