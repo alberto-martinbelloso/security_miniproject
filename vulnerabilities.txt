@@ -1,0 +1,12 @@
+
+SQL injection --> fixed using prepared statements
+
+Cross-site scripting: 
+	- Javascript injection 
+	- cookie hijacking
+
+Plain text password storage in DB --> encrypt passwords to fix it
+
+Bruteforce for passwords 
+
+Man-in-the-middle 
