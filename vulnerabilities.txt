@@ -1,6 +1,8 @@
 
 SQL injection --> fixed using prepared statements
 
+Navigate through folders in the url
+
 Cross-site scripting: 
 	- Javascript injection 
 	- cookie hijacking
