@@ -1,12 +1,18 @@
 
 SQL injection --> fixed using prepared statements
 
-Cross-site scripting: 
+Navigate through folders in the url:  --> TO-DO: change Apache configuration (disable folder navigation)
+	- Acces to uploads folder
+	- Acces to the code that creates the DB
+
+Cross-site scripting: --> fixed sanitizing inputs 
 	- Javascript injection 
 	- cookie hijacking
 
-Plain text password storage in DB --> encrypt passwords to fix it
+Plain text password storage in DB --> fixed hashing passwords
 
-Bruteforce for passwords 
+Bruteforce for passwords --> fixed requiring minimum 8 characters with capital and non-capital letters and sleep(1s) in login function
 
-Man-in-the-middle 
+Man-in-the-middle --> TO-DO: add SSL Certificate
+
+
