@@ -1,0 +1,282 @@
+\documentclass{article}
+
+\usepackage{graphicx}
+\usepackage{alltt}
+\usepackage{url}
+\usepackage{tabularx}
+%\usepackage{ngerman}
+\usepackage{longtable}
+\usepackage{color}
+\usepackage{tabularx}
+\usepackage[table]{xcolor}
+ 
+\setlength{\arrayrulewidth}{0.5mm}
+\setlength{\tabcolsep}{6pt}
+\renewcommand{\arraystretch}{2}
+
+\newenvironment{prettytablex}[1]{\vspace{0.3cm}\noindent\tabularx{\linewidth}{@{\hspace{\parindent}}#1@{}}}{\endtabularx\vspace{0.3cm}}
+\newenvironment{prettytable}{\prettytablex{l X}}{\endprettytablex}
+
+
+
+\title{\huge\sffamily\bfseries System Description and Risk Analysis}
+\author{Albert LLebaria \and Alberto Martín \and Sabin Rimniceanu \and Rafał Markiewicz}
+\date{\today}
+
+
+\begin{document}
+\maketitle
+
+%% please observe the page limit; comment or remove lines below before hand-in
+%\begin{center}
+%{\large\textcolor{red}{Page limit: 30 pages.}}
+%\end{center}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tableofcontents
+\pagebreak
+
+
+\section{System Characterization}
+
+\subsection{System Overview}
+The system is a web-based photo-sharing service. It allows users to upload, share and comment images. This service runs on a linux virtual machine. The service consists in php files used as views or model, a CSS file for styles, folders to store images and a MySQL databade.
+
+\subsection{System Functionality} 
+Anyone must be able to create an account for the system. Once the account is created, that person becomes a user. A user must be able to:
+\begin{itemize}  
+\setlength\itemsep{0em}
+\item Upload pictures.
+\item Share their own pictures with other named users on a picture-by-picture basis.
+\item View their own pictures and pictures other users have shared with them. 
+\item Comment on any picture they can view.
+\item View comments on any picture they can view.
+\end{itemize}
+\  \\
+Regarding security, the system must satisfy the following requirements:
+\begin{enumerate}  
+\setlength\itemsep{0em}
+\item Confidentiality: Only a user authorised for a picture can view, comment or read comments on that picture.
+\item Integrity: No unauthorised user can modify any picture or comment.
+\item Availability: No unauthorised user can prevent an image or a comment from being shown to authorised users.
+\end{enumerate}
+
+\subsection{Components and Subsystems}
+Files that display pages - Views: \\
+{\rowcolors{1}{blue!25!blue!12}{blue!10!blue!7}
+\begin{tabular}{ |p{3cm}|p{9cm}| }
+\hline
+footer.php & Contains the footer view of the page. \\
+header.php & Contains the header view of the page. \\
+index.php & Contains the view for one image - The image itself and the comments of the users. \\
+login.php & Contais the welcome page to the service if no user is loged in. Otherwise, it shows the user images (own and shared images). \\
+logout.php & Logs out the user and redirects to index. \\
+register.php & Contains the register form. If the user is created correctly, it redirects to the index. Otherwise it displays an error message. \\
+upload.php & Contains the form to upload images. \\
+\hline
+\end{tabular}
+}
+\ \\
+\newline
+Database tables:\\
+{\rowcolors{1}{blue!25!blue!12}{blue!10!blue!7}
+\begin{tabular}{ |p{3cm}|p{9cm}| }
+\hline
+User & Stores users data \\
+Image & Stores images data \\
+Shared\_image & Stores image sharing information \\
+Post & Stores comments information \\ 
+\hline
+\end{tabular}
+}
+\ \\
+\newline
+Files related with the database:\\
+{\rowcolors{1}{blue!25!blue!12}{blue!10!blue!7}
+\begin{tabular}{ |p{3cm}|p{9cm}| }
+\hline
+ssas.php & Creates the connection to the MySQL database and contains all the queries to extract and add information to the database. It is the model of the web service. \\
+datamodel.sql & Contains the script that creates the database. \\
+\hline
+\end{tabular}
+}
+\ \\
+\newline
+Other: \\
+{\rowcolors{1}{blue!25!blue!12}{blue!10!blue!7}
+\begin{tabular}{ |p{3cm}|p{9cm}| }
+\hline
+style.css & Contains the styling of the service. \\
+images/ & Folder that contains the welcome page images. \\
+uploads/ & Folder that contains all the images uploaded by the users. \\
+vendor/composer/ & Folder that contains Composer (tool for dependency management in PHP). \\
+vendor/firebase/ & Folder that contains Firebase (SDK to interact with Google Firebase from the PHP application). \\
+\hline
+\end{tabular}
+}
+
+\subsection{Interfaces}
+
+Specify  all interfaces and  information flows, from the technical as well as from the
+  organizational point of view.
+
+\subsection{Backdoors}
+
+Describe the implemented backdoors. {\bfseries Do not add
+    this section to the version of your report that is handed over to
+    the team that reviews your system!}
+
+
+\section{Risk Analysis and Security Measures}
+
+\subsection{Assets}
+
+Hosting computer: the server is running in a virtual machine inside a computer. Only the system administrator should have access to this computer. The required security for this should be locking the computer somewhere and restrict the access. Another security requirement would be to always update to the last versions all the software used by the host.
+\newline
+\newline
+User information: our system stores user information such as usernames and passwords. Having this information one can access to the system and log into the account to view the pictures and comments. The required security for this information is to avoid any kind of SQL attacks such as SQL injection and also to store the passwords hashed in the database instead of plain text, for instance.
+\newline
+\newline
+Pictures: the system also stores all the pictures that the users upload. Only the user that posts the picture and the ones with whom he/she decides to share them are allowed to view such pictures. Therefore, the required security must avoid that other unauthorised users can see pictures. This can be achieved again avoiding SQL attacks and url manipulation. The same applies to comments.
+
+\subsection{Threat Sources}
+Hackers: of course, hackers are a potential threat source. However, there is not a big motivation for them unless the users post sensible data or images. They could use this data to blackmail.
+\newline
+\newline
+Employees: the employees are the first physical threat source given that they work for the company and may have access to the system. Their motivation could be revenge on the boss for instance.
+
+\subsection{Risks and Countermeasures}
+
+List all potential threats and the
+  corresponding countermeasures. Estimate the risk based on 
+  the information about the threat, the threat sources and the 
+  corresponding countermeasure. For this purpose, use the following three
+  tables.
+
+%\subsubsection{Tools}
+
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\multicolumn{2}{|c|}{\bf Impact} \\
+\hline
+Impact & Description \\
+\hline
+\hline
+High   & \hspace*{20pt}\ldots \\
+\hline
+Medium & \hspace*{20pt}\ldots \\
+\hline
+Low   & \hspace*{20pt}\ldots \\
+\hline
+\end{tabular}
+%
+%\vspace{5mm}
+%
+%\noindent \hspace*{10pt}
+\begin{tabular}{|l|l|}
+\hline
+\multicolumn{2}{|c|}{\bf Likelihood} \\
+\hline
+Likelihood & Description \\
+\hline
+\hline
+High   & \hspace*{20pt}\ldots \\
+\hline
+Medium & \hspace*{20pt}\ldots \\
+\hline
+Low   & \hspace*{20pt}\ldots \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{5mm}
+
+\begin{center}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\multicolumn{4}{|c|}{{\bf Risk Level}} \\
+\hline
+{{\bf Likelihood}} & \multicolumn{3}{c|}{{\bf Impact}} \\ %\cline{2-4}
+     & Low & Medium & High \\  \hline
+ High & Low & Medium & High  \\
+\hline
+ Medium & Low & Medium & Medium \\
+\hline
+ Low & Low & Low & Low \\
+\hline
+\end{tabular}
+\end{center}
+
+
+{\rowcolors{2}{blue!25!blue!12}{blue!10!blue!7}
+\begin{tabular}{ |p{0.35cm}|p{2.6cm}|p{6cm}|p{1.5cm}|  }
+\hline
+No. & Threat & Countermeasure & Risk \\
+\hline
+1 & SQL injection & Use prepared statements & High \\
+2 & Manipulate url & ???? & Medium \\
+3 & Cross-site scripting (Javascript) & Sanitize inputs from users & Medium \\
+4 & Plain text password storage in DB & Hash passwords before storing in database & High \\
+5 & Bruteforce for passwords & Require difficult passwords and adding a sleep of 1 second in the login method & High \\
+6 & Man-in-the-middle & add SSL certificate & High\\
+\hline
+\end{tabular}
+}
+\subsubsection{{\it Evaluation Asset X}}
+
+Evaluate the likelihood, impact and the resulting risk,  after implementation of the corresponding countermeasures. For each threat, clearly name the threat source and the the threat action.
+
+\begin{footnotesize}
+\begin{prettytablex}{lXp{6.5cm}lll}
+No. & Threat & Implemented/planned countermeasure(s) & L & I & Risk \\
+\hline
+1 & ... & ... & {\it Low} & {\it Low} & {\it Low} \\
+\hline
+2 & ... & ...& {\it Medium} & {\it High} & {\it Medium} \\
+\hline
+\end{prettytablex}
+\end{footnotesize}
+
+
+
+\subsubsection{{\it Evaluation Asset y}}
+
+\begin{footnotesize}
+\begin{prettytablex}{lXp{6.5cm}lll}
+No. & Threat & Implemented/planned countermeasure(s) & L & I & Risk \\
+\hline
+1 & ... & ... & {\it Low} & {\it Low} & {\it Low} \\
+\hline
+2 & ... & ...& {\it Medium} & {\it High} & {\it Medium} \\
+\hline
+\end{prettytablex}
+\end{footnotesize}
+
+\subsubsection{Detailed Description of Selected Countermeasures}
+
+Optionally explain the details of the countermeasures mentioned above.
+
+
+
+\subsubsection{Risk Acceptance}
+
+List all medium and high risks, according to the evaluation above. For each risk, propose additional countermeasures that could be implemented to further reduce the risks.
+
+\begin{footnotesize}
+\begin{prettytablex}{p{2cm}X}
+No. of threat & Proposed countermeasure including expected impact  \\
+\hline
+... & ... \\
+\hline
+... & ... \\
+\hline
+\end{prettytablex}
+\end{footnotesize}
+
+\end{document}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../../book"
+%%% End: 
